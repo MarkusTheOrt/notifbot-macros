@@ -17,7 +17,7 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
             if idx == 0 {
                 quote! {
                     #[default]
-                    #[serde(alias = #variant, alias = #variant_lower)]
+                    #[serde(alias = #variant, alias = #variant_lower, alias = "#value")]
                     #ident = #value
                 }
             } else {
@@ -64,12 +64,15 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
         })
         .collect();
 
-    let fmt_arms: Vec<_> = variants.iter().map(|variant| {
-        let ident = format_ident!("{}", variant);
-        quote! {
-            #struct_name::#ident => f.write_fmt(format_args!("{}", #variant)),
-        }
-    }).collect();
+    let fmt_arms: Vec<_> = variants
+        .iter()
+        .map(|variant| {
+            let ident = format_ident!("{}", variant);
+            quote! {
+                #struct_name::#ident => f.write_fmt(format_args!("{}", #variant)),
+            }
+        })
+        .collect();
 
     let output = quote! {
         #[repr(u8)]
@@ -128,9 +131,9 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
         impl std::fmt::Display for #struct_name {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
                 match self {
-                #(#fmt_arms)*           
+                #(#fmt_arms)*
                 }
-      
+
             }
         }
     };
@@ -152,5 +155,3 @@ fn parse_macro_input(input: String) -> (Ident, Vec<String>) {
 
     (struct_name, variants)
 }
-
-
