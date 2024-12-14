@@ -23,7 +23,7 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
                 }
             } else {
                 quote! {
-                    #[serde(alias = #variant, alias = #variant_lower)]
+                    #[serde(alias = #variant, alias = #variant_lower, alias = #idx_as_str)]
                     #ident = #value
                 }
             }
@@ -78,6 +78,7 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
     let output = quote! {
         #[repr(u8)]
         #[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq, Default, Clone, Copy)]
+        #[serde(default)]
         pub enum #struct_name {
             #(#enum_variants,)*
         }
