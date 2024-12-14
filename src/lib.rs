@@ -13,11 +13,12 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
         .map(|(idx, variant)| {
             let variant_lower = variant.to_lowercase();
             let ident = format_ident!("{}", variant);
+            let idx_as_str = idx.to_string();
             let value = idx as u8;
             if idx == 0 {
                 quote! {
                     #[default]
-                    #[serde(alias = #variant, alias = #variant_lower, alias = #value)]
+                    #[serde(alias = #variant, alias = #variant_lower, alias = #idx_as_str)]
                     #ident = #value
                 }
             } else {
