@@ -17,7 +17,7 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
             if idx == 0 {
                 quote! {
                     #[default]
-                    #[serde(alias = #variant, alias = #variant_lower, alias = "#value")]
+                    #[serde(alias = #variant, alias = #variant_lower, alias = #value)]
                     #ident = #value
                 }
             } else {
