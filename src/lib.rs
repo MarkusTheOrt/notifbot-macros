@@ -14,9 +14,17 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
             let variant_lower = variant.to_lowercase();
             let ident = format_ident!("{}", variant);
             let value = idx as u8;
-            quote! {
-                #[serde(alias = #variant, alias = #variant_lower)]
-                #ident = #value
+            if idx == 0 {
+                quote! {
+                    #[default]
+                    #[serde(alias = #variant, alias = #variant_lower)]
+                    #ident = #value
+                }
+            } else {
+                quote! {
+                    #[serde(alias = #variant, alias = #variant_lower)]
+                    #ident = #value
+                }
             }
         })
         .collect();
@@ -65,7 +73,7 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
 
     let output = quote! {
         #[repr(u8)]
-        #[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq)]
+        #[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq, Default)]
         pub enum #struct_name {
             #(#enum_variants,)*
         }
@@ -144,3 +152,5 @@ fn parse_macro_input(input: String) -> (Ident, Vec<String>) {
 
     (struct_name, variants)
 }
+
+
