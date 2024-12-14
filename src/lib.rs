@@ -78,7 +78,6 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
     let output = quote! {
         #[repr(u8)]
         #[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq, Default, Clone, Copy)]
-        #[serde(default)]
         pub enum #struct_name {
             #(#enum_variants,)*
         }
