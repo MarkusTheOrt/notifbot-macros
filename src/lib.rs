@@ -127,6 +127,10 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
             pub fn to_str(&self) -> &'static str {
                 self.into()
             }
+            
+            pub fn i8(self) -> i8 {
+                self.into()
+            }
         }
 
         impl std::fmt::Display for #struct_name {
