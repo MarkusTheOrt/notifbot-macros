@@ -141,6 +141,13 @@ pub fn notifbot_enum(input: TokenStream) -> TokenStream {
 
             }
         }
+
+        impl libsql::params::IntoValue for #struct_name {
+            fn into_value(self) -> Result<libsql::Value> {
+                libsql::Value::Text(self.to_str().to_owned())
+            }
+        }
+
     };
 
     TokenStream::from(output)
